@@ -5,6 +5,8 @@ import {setCarouselState} from "../../../../redux/CarouselReducer";
 
 const mapStateToProps = state => {
     return {
+        lan: state.languageState.lan,
+        measure: state.languageState.measure,
         carouselArr: state.carouselState
     }
 }

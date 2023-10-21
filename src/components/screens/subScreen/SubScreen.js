@@ -21,13 +21,14 @@ const SubScreen = ({
                        sunrise,
                        sunset,
                        setSubLocationInfo,
-                       setSubLocationWeather
+                       setSubLocationWeather,
+  lan
                    }) => {
     const [isLoaded, setIsLoaded] = useState(false)
     const navigation = useNavigation()
     useEffect(() => {
         async function fetchData() {
-            const response = await getCurrentLocationWeather(countryCoordinateLat, countryCoordinateLon)
+            const response = await getCurrentLocationWeather(countryCoordinateLat, countryCoordinateLon, lan)
             setSubLocationWeather(response)
             setIsLoaded(true)
         }
@@ -49,10 +50,10 @@ const SubScreen = ({
                     <View style={styles.middle}>
                         <Image style={{width: 150, height: 150}} source={{uri:`https://openweathermap.org/img/wn/${icon}@2x.png`}}/>
                         <Text style={styles.degrees}>
-                            {temp}°С
+                            {temp}
                         </Text>
                         <Text style={styles.text}>
-                            {weatherDescription}{'\n'}{tempMin}°/{tempMax}°
+                            {weatherDescription}{'\n'}{tempMin}/{tempMax}
                         </Text>
                     </View>
                 </>

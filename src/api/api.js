@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getStoreLanguage } from "../storage/localizationStorage";
 
 const instance = axios.create({
   withCredentials: true,
@@ -16,18 +17,18 @@ const nameInstance = axios.create({
   }
 })
 
-export const getCurrentLocationWeather = async (lat, lon) => {
+export const getCurrentLocationWeather = async (lat, lon, lan) => {
   try {
-    return await instance.get(`weather?lat=${lat}&lon=${lon}&appid=1892e245ac9d72bd2babaffbf3d60ef1`)
+    return await instance.get(`weather?lat=${lat}&lon=${lon}&lang=${lan}&appid=1892e245ac9d72bd2babaffbf3d60ef1`)
       .then(res => res.data)
   } catch (e) {
     console.log(e)
   }
 }
 
-export const getDiapasonLocationWeather = async (lat, lon) => {
+export const getDiapasonLocationWeather = async (lat, lon, lan) => {
   try {
-    return await instance.get(`forecast/?lat=${lat}&lon=${lon}&appid=1892e245ac9d72bd2babaffbf3d60ef1`)
+    return await instance.get(`forecast/?lat=${lat}&lon=${lon}&lang=${lan}&appid=1892e245ac9d72bd2babaffbf3d60ef1`)
       .then(res => {
         return res.data.list.filter(el => el.dt <= (Date.now() / 1000 + 180*360))
       })
@@ -37,8 +38,9 @@ export const getDiapasonLocationWeather = async (lat, lon) => {
 }
 
 export const getLocationByName = async country => {
+  const lang = await getStoreLanguage()
   try {
-    return await nameInstance.get(`direct?q=${country}&limit=5&appid=1892e245ac9d72bd2babaffbf3d60ef1`)
+    return await nameInstance.get(`direct?q=${country}&limit=5&lang=${lang}&appid=1892e245ac9d72bd2babaffbf3d60ef1`)
       .then(res => res.data[4])
   } catch (e) {
     console.log(e)

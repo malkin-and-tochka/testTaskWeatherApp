@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import CarouselContainer from "./Carousel/CarouselContainer";
 import { setStoreDataRelevance } from "../../../storage/dataRelevenceStorage";
 import RelevanceOfData from "./RelevanceOfData";
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from "@react-native-community/geolocation";
 
 const MainScreen = ({
                       country,
@@ -26,34 +26,35 @@ const MainScreen = ({
                       sunrise,
                       sunset,
                       setCurrentLocationWeather,
+  lan
                     }) => {
   const [isNetworkExist, setIsNetworkExist] = useState(true);
   const dispatch = useDispatch();
 
   const setGeolocation = () => {
     Geolocation.getCurrentPosition(
-    async (pos) => {
-      const response = await getCurrentLocationWeather(pos.coords.latitude, pos.coords.longitude);
-      setCurrentLocationWeather(response);
-      await setStoreDataRelevance(Date.now());
-    },
-    (error) => console.log("GetCurrentPosition Error", JSON.stringify(error)),
-    { enableHighAccuracy: true },
-  );
-  }
+      async (pos) => {
+        const response = await getCurrentLocationWeather(pos.coords.latitude, pos.coords.longitude, lan);
+        setCurrentLocationWeather(response);
+        await setStoreDataRelevance(Date.now());
+      },
+      (error) => console.log("GetCurrentPosition Error", JSON.stringify(error)),
+      { enableHighAccuracy: true },
+    );
+  };
 
   useEffect(() => {
     //check connection
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         async function fetchData() {
-          setGeolocation()
+          setGeolocation();
         }
 
         fetchData();
       } else {
         const fetchingOfStoreData = await getStoreWeather();
-        dispatch(setCurrentLocationWeather(fetchingOfStoreData));
+        setCurrentLocationWeather(fetchingOfStoreData);
         setIsNetworkExist(false);
       }
     });
@@ -73,10 +74,10 @@ const MainScreen = ({
         <Image style={{ width: 150, height: 150 }}
                source={{ uri: `https://openweathermap.org/img/wn/${icon}@2x.png` }} />
         <Text style={styles.degrees}>
-          {temp}°С {"\n"}
+          {temp}
         </Text>
         <Text style={styles.text}>
-          {weatherDescription} {tempMin}°/{tempMax}°
+          {weatherDescription}{"\n"}{tempMin}/{tempMax}
         </Text>
       </View>
       <CarouselContainer />

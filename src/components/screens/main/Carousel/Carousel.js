@@ -7,12 +7,12 @@ import { getStoreCarousel } from "../../../../storage/carouselStorage";
 import { useDispatch } from "react-redux";
 import Geolocation from "@react-native-community/geolocation";
 
-const Carousel = ({ carouselArr, setCarouselState }) => {
+const Carousel = ({ carouselArr, setCarouselState, lan, measure }) => {
   const dispatch = useDispatch();
   const setGeolocation = () => {
     Geolocation.getCurrentPosition(
       async (pos) => {
-        const hourWeatherResponse = await getDiapasonLocationWeather(pos.coords.latitude, pos.coords.longitude, Date.now() / 1000);
+        const hourWeatherResponse = await getDiapasonLocationWeather(pos.coords.latitude, pos.coords.longitude, lan);
         setCarouselState(hourWeatherResponse);
       },
       (error) => console.log("GetCurrentPosition Error", JSON.stringify(error)),
@@ -39,7 +39,7 @@ const Carousel = ({ carouselArr, setCarouselState }) => {
   const arrToCarousel = carouselArr.map(el => {
     const date = new Date(el.dt * 1000);
     const currentHour = date.getHours();
-    return <CarouselElement key={el.dt} icon={el.weather[0].icon} hour={`${currentHour}:00`} temp={el.main.temp}
+    return <CarouselElement lan={lan} measure={measure} key={el.dt} icon={el.weather[0].icon} hour={`${currentHour}:00`} temp={el.main.temp}
                             weatherDescription={el.weather[0].description} />;
   });
 
